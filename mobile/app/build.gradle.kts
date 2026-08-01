@@ -65,6 +65,6 @@ dependencies {
     implementation("androidx.security:security-crypto:1.1.0")
 
     implementation("com.squareup.okhttp3:okhttp:5.4.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.9.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.11.0")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 }
