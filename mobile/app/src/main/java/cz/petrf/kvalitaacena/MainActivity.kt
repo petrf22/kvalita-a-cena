@@ -33,15 +33,20 @@ import cz.petrf.kvalitaacena.ui.navigation.ARG_BARCODE
 import cz.petrf.kvalitaacena.ui.navigation.ARG_PRODUCT_ID
 import cz.petrf.kvalitaacena.ui.navigation.ROUTE_PRICE_ENTRY
 import cz.petrf.kvalitaacena.ui.navigation.ROUTE_PRODUCT_DETAIL
+import cz.petrf.kvalitaacena.ui.navigation.ROUTE_PRODUCT_FORM
+import cz.petrf.kvalitaacena.ui.navigation.ROUTE_STORE_FORM
 import cz.petrf.kvalitaacena.ui.navigation.TopLevelDestination
 import cz.petrf.kvalitaacena.ui.navigation.priceEntryRouteByBarcode
 import cz.petrf.kvalitaacena.ui.navigation.priceEntryRouteByProductId
 import cz.petrf.kvalitaacena.ui.navigation.productDetailRoute
+import cz.petrf.kvalitaacena.ui.navigation.productFormRoute
 import cz.petrf.kvalitaacena.ui.price.PriceEntryScreen
 import cz.petrf.kvalitaacena.ui.price.PriceEntryTarget
+import cz.petrf.kvalitaacena.ui.product.ProductFormScreen
 import cz.petrf.kvalitaacena.ui.scan.ScanScreen
 import cz.petrf.kvalitaacena.ui.search.SearchScreen
 import cz.petrf.kvalitaacena.ui.settings.SettingsScreen
+import cz.petrf.kvalitaacena.ui.store.StoreFormScreen
 import cz.petrf.kvalitaacena.ui.theme.KvalitaACenaTheme
 import kotlinx.coroutines.launch
 
@@ -127,8 +132,23 @@ private fun AppScaffold() {
           else -> null
         }
         if (target != null) {
-          PriceEntryScreen(target = target, onDone = { navController.popBackStack() })
+          PriceEntryScreen(
+            target = target,
+            onDone = { navController.popBackStack() },
+            onAddStore = { navController.navigate(ROUTE_STORE_FORM) },
+            onAddProduct = { newBarcode -> navController.navigate(productFormRoute(newBarcode)) },
+          )
         }
+      }
+      composable(ROUTE_STORE_FORM) {
+        StoreFormScreen(onDone = { navController.popBackStack() })
+      }
+      composable(
+        ROUTE_PRODUCT_FORM,
+        arguments = listOf(navArgument(ARG_BARCODE) { type = NavType.StringType; nullable = true; defaultValue = null }),
+      ) { backStackEntry ->
+        val barcode = backStackEntry.arguments?.getString(ARG_BARCODE)
+        ProductFormScreen(barcode = barcode, onDone = { navController.popBackStack() })
       }
     }
   }
